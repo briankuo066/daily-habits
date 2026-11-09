@@ -1,0 +1,1032 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Habits｜每日習慣追蹤</title>
+
+<style>
+:root {
+  --primary: #7868dc;
+  --primary-light: #f0edff;
+  --bg: #f7f8fc;
+  --text: #25283b;
+  --muted: #9296a8;
+  --border: #ececf3;
+  --green: #36b58a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Microsoft JhengHei", sans-serif;
+}
+
+button, input {
+  font: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1050px;
+  margin: auto;
+  padding: 35px 22px 60px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.logo {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.date {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.welcome {
+  margin-bottom: 25px;
+}
+
+.welcome h1 {
+  font-size: 29px;
+  margin: 0 0 8px;
+}
+
+.welcome p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* 統計卡片 */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 22px;
+  border-radius: 17px;
+  border: 1px solid var(--border);
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.stat-value {
+  font-size: 29px;
+  font-weight: 750;
+}
+
+.stat-value small {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.progress-track {
+  height: 8px;
+  background: #eeedf5;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 13px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary);
+  border-radius: 20px;
+  transition: width .3s;
+}
+
+/* 主要內容 */
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 23px;
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.panel-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* 習慣清單 */
+
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.habit-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  transition: .2s;
+}
+
+.habit-item.done {
+  background: #faf9ff;
+  border-color: #ddd7ff;
+}
+
+.habit-icon {
+  width: 43px;
+  height: 43px;
+  background: var(--primary-light);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.habit-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.habit-name {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.habit-detail {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.check-btn {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid #d9d9e5;
+  border-radius: 50%;
+  background: white;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 17px;
+}
+
+.check-btn.checked {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #c3c3ce;
+  cursor: pointer;
+  font-size: 17px;
+  padding: 5px;
+}
+
+.delete-btn:hover {
+  color: #e46e78;
+}
+
+/* 新增習慣 */
+
+.add-form {
+  display: flex;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.add-form input {
+  min-width: 0;
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+.add-form input:focus {
+  border-color: var(--primary);
+}
+
+.add-btn {
+  padding: 0 17px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* 連續紀錄 */
+
+.streak-box {
+  text-align: center;
+  background: var(--primary-light);
+  padding: 22px;
+  border-radius: 14px;
+}
+
+.streak-number {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.streak-text {
+  font-size: 13px;
+  color: #8881b5;
+  margin-top: 5px;
+}
+
+/* 七日紀錄 */
+
+.week-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.day-item {
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+}
+
+.day-name {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.day-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f0f0f5;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  color: #888;
+}
+
+.day-circle.complete {
+  background: var(--green);
+  color: white;
+}
+
+.day-circle.partial {
+  background: #e7e1ff;
+  color: var(--primary);
+}
+
+.day-percent {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* 今日鼓勵 */
+
+.quote {
+  background: #f0faf6;
+  color: #399b79;
+  padding: 17px;
+  border-radius: 13px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* 空清單 */
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 30px 10px;
+  font-size: 14px;
+}
+
+footer {
+  text-align: center;
+  color: #b2b3c0;
+  font-size: 12px;
+  margin-top: 25px;
+}
+
+@media (max-width: 700px) {
+  .container {
+    padding: 25px 15px 40px;
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .stats {
+    gap: 9px;
+  }
+
+  .stat-card {
+    padding: 15px 11px;
+  }
+
+  .stat-value {
+    font-size: 23px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .welcome h1 {
+    font-size: 25px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="logo">Daily<span>.</span>Habits</div>
+    <div class="date" id="todayDate"></div>
+  </header>
+
+  <section class="welcome">
+    <h1>今天也要好好生活 ✨</h1>
+    <p>每天進步一點點，累積成更好的自己。</p>
+  </section>
+
+  <!-- 今日統計 -->
+
+  <section class="stats">
+
+    <div class="stat-card">
+      <div class="stat-label">今日完成</div>
+      <div class="stat-value" id="doneCount">0<small> / 4</small></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">今日完成率</div>
+      <div class="stat-value" id="percentage">0%</div>
+      <div class="panel-subtitle">今日習慣達成狀況</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">累積完成</div>
+      <div class="stat-value" id="totalCount">0</div>
+      <div class="panel-subtitle">所有習慣的完成次數</div>
+    </div>
+
+  </section>
+
+  <div class="main-grid">
+
+    <!-- 左側：習慣管理 -->
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">我的每日習慣</div>
+          <div class="panel-subtitle">完成後點擊右側圓圈打卡</div>
+        </div>
+        <div>🎯</div>
+      </div>
+
+      <div class="habit-list" id="habitList"></div>
+
+      <form class="add-form" id="addForm">
+        <input
+          type="text"
+          id="habitInput"
+          placeholder="新增一個習慣，例如：寫日記"
+          maxlength="30"
+          required
+        >
+        <button class="add-btn" type="submit">＋ 新增</button>
+      </form>
+
+    </section>
+
+    <!-- 右側：統計 -->
+
+    <div>
+
+      <section class="panel">
+
+        <div class="panel-header">
+          <div class="panel-title">🔥 連續完成紀錄</div>
+        </div>
+
+        <div class="streak-box">
+          <div class="streak-number" id="streakCount">0</div>
+          <div class="streak-text">連續完成天數</div>
+        </div>
+
+        <div class="panel-subtitle" style="text-align:center;margin-top:13px">
+          每天堅持，讓好習慣成為生活的一部分。
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">📅 最近七天</div>
+            <div class="panel-subtitle">每日習慣完成情況</div>
+          </div>
+        </div>
+
+        <div class="week-list" id="weekList"></div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-title" style="margin-bottom:13px">
+          💡 今日小提醒
+        </div>
+
+        <div class="quote" id="dailyQuote">
+          不需要一次改變全部，只要每天比昨天進步一點點。
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <footer>
+    Daily Habits © 2026 · 每一天都是新的開始 ❤️
+  </footer>
+
+</div>
+
+<script>
+
+// ===============================
+// 1. 基本設定與資料
+// ===============================
+
+const STORAGE_KEY = "dailyHabitsData_v1";
+
+const defaultHabits = [
+  { id: 1, name: "喝水 2000ml", icon: "💧" },
+  { id: 2, name: "運動 30 分鐘", icon: "🏃" },
+  { id: 3, name: "閱讀 20 分鐘", icon: "📖" },
+  { id: 4, name: "晚上 11 點前睡覺", icon: "🌙" }
+];
+
+const icons = ["⭐", "💧", "🏃", "📖", "🌱", "🎯", "🧘", "✍️"];
+
+let data = loadData();
+
+// ===============================
+// 2. 取得及保存資料
+// ===============================
+
+function loadData() {
+
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+
+      if (
+        Array.isArray(parsed.habits) &&
+        parsed.logs &&
+        typeof parsed.logs === "object" &&
+        !Array.isArray(parsed.logs)
+      ) {
+        return parsed;
+      }
+    }
+  } catch (error) {
+    console.warn("無法讀取儲存資料", error);
+  }
+
+  return {
+    habits: defaultHabits.map(item => ({ ...item })),
+    logs: {}
+  };
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    alert("資料儲存失敗，請檢查瀏覽器儲存空間或設定。");
+  }
+}
+
+// ===============================
+// 3. 日期工具
+// ===============================
+
+function getDateKey(date = new Date()) {
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function getDateOffset(offset) {
+
+  const date = new Date();
+
+  date.setDate(date.getDate() + offset);
+
+  return date;
+}
+
+function getTodayLog() {
+
+  const key = getDateKey();
+
+  if (!data.logs[key]) {
+    data.logs[key] = [];
+  }
+
+  return data.logs[key];
+}
+
+// ===============================
+// 4. 今日日期
+// ===============================
+
+function renderDate() {
+
+  const date = new Date();
+
+  document.getElementById("todayDate").textContent =
+    date.toLocaleDateString("zh-TW", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long"
+    });
+}
+
+// ===============================
+// 5. 顯示習慣清單
+// ===============================
+
+function renderHabits() {
+
+  const list = document.getElementById("habitList");
+
+  list.innerHTML = "";
+
+  const todayLog = getTodayLog();
+
+  if (data.habits.length === 0) {
+
+    list.innerHTML =
+      '<div class="empty">目前還沒有習慣，新增一個開始吧！</div>';
+
+    return;
+  }
+
+  data.habits.forEach((habit, index) => {
+
+    const done = todayLog.includes(habit.id);
+
+    const item = document.createElement("div");
+
+    item.className = "habit-item" + (done ? " done" : "");
+
+    // 圖示
+    const icon = document.createElement("div");
+    icon.className = "habit-icon";
+    icon.textContent = habit.icon;
+
+    // 文字
+    const info = document.createElement("div");
+    info.className = "habit-info";
+
+    const name = document.createElement("div");
+    name.className = "habit-name";
+    name.textContent = habit.name;
+
+    const detail = document.createElement("div");
+    detail.className = "habit-detail";
+
+    detail.textContent =
+      done ? "今日已完成 ✓" : "今天還沒完成";
+
+    info.append(name, detail);
+
+    // 打卡按鈕
+    const check = document.createElement("button");
+
+    check.className = "check-btn" + (done ? " checked" : "");
+    check.textContent = done ? "✓" : "";
+    check.setAttribute(
+      "aria-label",
+      done ? "取消完成 " + habit.name : "完成 " + habit.name
+    );
+
+    check.addEventListener("click", () => {
+      toggleHabit(habit.id);
+    });
+
+    // 刪除按鈕
+    const del = document.createElement("button");
+
+    del.className = "delete-btn";
+    del.textContent = "×";
+    del.title = "刪除習慣";
+
+    del.addEventListener("click", () => {
+      deleteHabit(habit.id);
+    });
+
+    item.append(icon, info, check, del);
+
+    list.appendChild(item);
+
+  });
+
+}
+
+// ===============================
+// 6. 打卡及取消打卡
+// ===============================
+
+function toggleHabit(id) {
+
+  const todayLog = getTodayLog();
+
+  const index = todayLog.indexOf(id);
+
+  if (index === -1) {
+    todayLog.push(id);
+  } else {
+    todayLog.splice(index, 1);
+  }
+
+  saveData();
+
+  renderAll();
+}
+
+// ===============================
+// 7. 新增習慣
+// ===============================
+
+document.getElementById("addForm").addEventListener(
+  "submit",
+  function(event) {
+
+    event.preventDefault();
+
+    const input = document.getElementById("habitInput");
+
+    const name = input.value.trim();
+
+    if (!name) return;
+
+    const exists = data.habits.some(
+      habit => habit.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (exists) {
+      alert("這個習慣已經存在！");
+      return;
+    }
+
+    const newId = Date.now() + Math.floor(Math.random() * 1000);
+
+    const icon = icons[
+      Math.floor(Math.random() * icons.length)
+    ];
+
+    data.habits.push({
+      id: newId,
+      name: name,
+      icon: icon
+    });
+
+    input.value = "";
+
+    saveData();
+
+    renderAll();
+
+  }
+);
+
+// ===============================
+// 8. 刪除習慣
+// ===============================
+
+function deleteHabit(id) {
+
+  const habit = data.habits.find(item => item.id === id);
+
+  if (!habit) return;
+
+  if (!confirm(`確定要刪除「${habit.name}」嗎？`)) {
+    return;
+  }
+
+  data.habits = data.habits.filter(
+    item => item.id !== id
+  );
+
+  // 同時移除這個習慣的所有歷史紀錄
+  Object.keys(data.logs).forEach(date => {
+
+    data.logs[date] = data.logs[date].filter(
+      itemId => itemId !== id
+    );
+
+  });
+
+  saveData();
+
+  renderAll();
+}
+
+// ===============================
+// 9. 更新今日統計
+// ===============================
+
+function renderStats() {
+
+  const todayLog = getTodayLog();
+
+  const total = data.habits.length;
+
+  const done = data.habits.filter(
+    habit => todayLog.includes(habit.id)
+  ).length;
+
+  const percent = total === 0
+    ? 0
+    : Math.round(done / total * 100);
+
+  document.getElementById("doneCount").innerHTML =
+    `${done}<small> / ${total}</small>`;
+
+  document.getElementById("percentage").textContent =
+    percent + "%";
+
+  document.getElementById("progressBar").style.width =
+    percent + "%";
+
+  // 累積完成次數
+  let totalDone = 0;
+
+  Object.values(data.logs).forEach(log => {
+    totalDone += log.length;
+  });
+
+  document.getElementById("totalCount").textContent =
+    totalDone;
+
+}
+
+// ===============================
+// 10. 計算連續完成天數
+// ===============================
+
+function renderStreak() {
+
+  let streak = 0;
+
+  const today = getDateKey();
+
+  const todayLog = data.logs[today] || [];
+
+  const todayComplete =
+    data.habits.length > 0 &&
+    data.habits.every(habit => todayLog.includes(habit.id));
+
+  // 今天尚未全部完成時，從昨天開始計算
+  let offset = todayComplete ? 0 : -1;
+
+  // 空清單不計算連續完成
+  if (data.habits.length > 0) {
+
+    while (true) {
+
+      const date = getDateOffset(offset);
+      const key = getDateKey(date);
+      const log = data.logs[key] || [];
+
+      const completed = data.habits.every(
+        habit => log.includes(habit.id)
+      );
+
+      if (!completed) break;
+
+      streak++;
+
+      offset--;
+
+    }
+
+  }
+
+  document.getElementById("streakCount").textContent =
+    streak;
+
+}
+
+// ===============================
+// 11. 最近七天紀錄
+// ===============================
+
+function renderWeek() {
+
+  const weekList = document.getElementById("weekList");
+
+  weekList.innerHTML = "";
+
+  const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+
+  for (let i = 6; i >= 0; i--) {
+
+    const date = getDateOffset(-i);
+
+    const key = getDateKey(date);
+
+    const log = data.logs[key] || [];
+
+    const total = data.habits.length;
+
+    const done = data.habits.filter(
+      habit => log.includes(habit.id)
+    ).length;
+
+    const percent = total === 0
+      ? 0
+      : Math.round(done / total * 100);
+
+    const day = document.createElement("div");
+
+    day.className = "day-item";
+
+    const name = document.createElement("div");
+
+    name.className = "day-name";
+
+    name.textContent = weekdays[date.getDay()];
+
+    const circle = document.createElement("div");
+
+    circle.className = "day-circle";
+
+    if (percent === 100 && total > 0) {
+      circle.classList.add("complete");
+      circle.textContent = "✓";
+    } else if (percent > 0) {
+      circle.classList.add("partial");
+      circle.textContent = done;
+    } else {
+      circle.textContent = "·";
+    }
+
+    const percentText = document.createElement("div");
+
+    percentText.className = "day-percent";
+
+    percentText.textContent = percent + "%";
+
+    day.append(name, circle, percentText);
+
+    weekList.appendChild(day);
+
+  }
+
+}
+
+// ===============================
+// 12. 每日鼓勵文字
+// ===============================
+
+function renderQuote() {
+
+  const quotes = [
+    "不需要一次改變全部，只要每天比昨天進步一點點。",
+    "小小的堅持，也能創造大大的改變。",
+    "今天的努力，是明天更好的自己。",
+    "完成一件小事，也值得為自己感到驕傲。",
+    "不要追求完美，持續行動就很棒了。",
+    "每一次打卡，都是送給自己的禮物。",
+    "相信累積的力量，你正在慢慢變好。"
+  ];
+
+  const today = new Date();
+
+  const dayNumber = Math.floor(
+    (new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      - new Date(today.getFullYear(), 0, 0)) / 86400000
+  );
+
+  document.getElementById("dailyQuote").textContent =
+    quotes[dayNumber % quotes.length];
+
+}
+
+// ===============================
+// 13. 更新所有畫面
+// ===============================
+
+function renderAll() {
+
+  renderHabits();
+
+  renderStats();
+
+  renderStreak();
+
+  renderWeek();
+
+  renderQuote();
+
+}
+
+// ===============================
+// 14. 網頁初始化
+// ===============================
+
+renderDate();
+
+renderAll();
+
+</script>
+
+</body>
+</html>
